@@ -1,0 +1,36 @@
+---
+- name: Installer les apps sélectionnées via winget
+  hosts: windows
+  gather_facts: no
+
+  vars:
+    # Catalogue : choix Jenkins -> ID winget
+    app_catalog:
+      vlc: VideoLAN.VLC
+      chrome: Google.Chrome
+      firefox: Mozilla.Firefox
+      zoom: Zoom.Zoom
+      forticlient: Fortinet.FortiClientVPN
+      winrar: RARLab.WinRAR
+      7zip: 7zip.7zip
+      adobe_reader: Adobe.Acrobat.Reader.32-bit
+
+  # Ici : on attend que Jenkins passe déjà une LISTE JSON
+  # Exemple : -e 'app_list=["vlc","chrome","zoom"]'
+  vars_prompt: []
+
+  tasks:
+    - name: Vérifier que les choix sont valides
+      ansible.builtin.assert:
+        that: item in app_catalog
+        fail_msg: "Choix '{{ item }}' non supporté. Valides: {{ app_catalog.keys() | list }}"
+      loop: "{{ app_list }}"
+
+    - name: Installer via winget
+      ansible.windows.win_powershell:
+        script: |
+          winget install --id '{{ app_catalog[item] }}' --exact `
+            --silent --accept-package-agreements --accept-source-agreements
+      loop: "{{ app_list }}"
+      loop_control:
+        label: "{{ item }} -> {{ app_catalog[item] }}"
