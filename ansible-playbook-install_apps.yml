@@ -15,8 +15,6 @@
       7zip: 7zip.7zip
       adobe_reader: Adobe.Acrobat.Reader.32-bit
 
-  # Ici : on attend que Jenkins passe déjà une LISTE JSON
-  # Exemple : -e 'app_list=["vlc","chrome","zoom"]'
   vars_prompt: []
 
   tasks:
