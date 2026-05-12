@@ -4,7 +4,6 @@
   gather_facts: no
 
   vars:
-    # Catalogue : choix Jenkins -> ID winget
     app_catalog:
       vlc: VideoLAN.VLC
       chrome: Google.Chrome
