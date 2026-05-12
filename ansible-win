@@ -1,0 +1,28 @@
+- name: Installer Chrome et Firefox sur Windows 11
+  hosts: windows
+  gather_facts: no
+  tasks:
+
+    - name: Copier ChromeSetup.exe
+      ansible.windows.win_copy:
+        src: files/ChromeSetup.exe
+        dest: C:\Users\Public\ChromeSetup.exe
+
+    - name: Installer Google Chrome
+      ansible.windows.win_package:
+        path: C:\Users\Public\ChromeSetup.exe
+        arguments: /silent /install
+        product_id: Google Chrome
+        state: present
+
+    - name: Copier FirefoxInstaller.exe
+      ansible.windows.win_copy:
+        src: files/FirefoxInstaller.exe
+        dest: C:\Users\Public\FirefoxInstaller.exe
+
+    - name: Installer Firefox
+      ansible.windows.win_package:
+        path: C:\Users\Public\FirefoxInstaller.exe
+        arguments: -ms
+        product_id: Mozilla Firefox
+        state: present
